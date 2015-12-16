@@ -1,3 +1,5 @@
+require 'api_constraints'
+
 P3::Application.routes.draw do
 =begin
   get "contacts/index"
@@ -10,11 +12,19 @@ P3::Application.routes.draw do
 
   get "contacts/destroy"
 =end
+#api definition
+  namespace :api, defaults: { format: :json },
+            constraints: { subdomain: 'api' }, path: '/'  do
+    scope module: :v1,
+          constraints: ApiConstraints.new(version: 1, default: true) do
+      # We are going to list our resources here
+    end
+  end
   resources :contacts, :only => [:show, :new, :create]
 
 
   # The priority is based upon order of creation:
-  # first created -> highest priority.
+  # first created -> highest1 priority.
 
   # Sample of regular route:
   #   match 'products/:id' => 'catalog#view'
